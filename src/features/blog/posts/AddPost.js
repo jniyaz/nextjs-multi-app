@@ -1,30 +1,39 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectAllUsers } from "../../users/usersSlice";
-import { postAdded } from "./postsSlice";
+import { getAllUsers } from "../../users/usersSlice";
+import { addNewPost } from "./postsSlice";
 
 const AddPost = () => {
   const dispatch = useDispatch();
-  const users = useSelector(selectAllUsers);
+  const users = useSelector(getAllUsers);
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [userId, setUserId] = useState("");
+  const [addRequestStatus, setAddRequestStatus] = useState("idle");
 
   const onTitleChanged = (e) => setTitle(e.target.value);
   const onContentChanged = (e) => setContent(e.target.value);
   const onAuthorChanged = (e) => setUserId(e.target.value);
 
+  const canSave =
+    [title, content, userId].every(Boolean) && addRequestStatus === "idle";
+
   const onSubmit = () => {
-    if (title && content && userId) {
-      dispatch(postAdded(title, content, userId));
-      setTitle("");
-      setContent("");
-      setUserId("");
+    if (canSave) {
+      try {
+        setAddRequestStatus("pending");
+        dispatch(addNewPost({title, body: content, userId})).unwrap();
+        setTitle("");
+        setContent("");
+        setUserId("");
+      } catch (error) {
+        console.log(error.message);
+      } finally {
+        setAddRequestStatus("idle");
+      }
     }
   };
-
-  const canSave = Boolean(title) && Boolean(content) && Boolean(userId);
 
   const userOptions = users.map((user) => (
     <option key={user.id} value={user.id}>
@@ -38,7 +47,11 @@ const AddPost = () => {
       <form>
         <div className="flex flex-col my-3">
           <label>Author:</label>
-          <select className="form-select px-4 py-3" value={userId} onChange={onAuthorChanged}>
+          <select
+            className="form-select px-4 py-3"
+            value={userId}
+            onChange={onAuthorChanged}
+          >
             <option value={""}></option>
             {userOptions}
           </select>

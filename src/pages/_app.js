@@ -1,7 +1,9 @@
+import '../styles/globals.css'
 import { Provider } from 'react-redux'
 import { store } from '../app/store'
 
-import '../styles/globals.css'
+import { fetchUsers } from './../features/users/usersSlice';
+store.dispatch(fetchUsers());
 
 function MyApp({ Component, pageProps }) {
   return (
