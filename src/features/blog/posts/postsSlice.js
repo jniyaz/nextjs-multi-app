@@ -31,6 +31,19 @@ export const addNewPost = createAsyncThunk(
   }
 );
 
+export const updatePost = createAsyncThunk(
+  "posts/updatePost",
+  async (initialPost) => {
+    const { id } = initialPost;
+    try {
+      const res = await axios.put(`${POSTS_URL}/${id}`, initialPost);
+      return res.data;
+    } catch (err) {
+      return err.message;
+    }
+  }
+);
+
 const postsSlice = createSlice({
   name: "posts",
   initialState,
@@ -103,13 +116,26 @@ const postsSlice = createSlice({
           eyes: 0,
         };
         state.posts.push(action.payload);
-      });
+      })
+      .addCase(updatePost.fulfilled, (state, action) => {
+        if (!action.payload?.id) {
+          console.log('could not complete');
+          console.log(action.payload);
+          return;
+        }
+        const { id } = action.payload;
+        action.payload.userId = Number(action.payload.userId);
+        action.payload.date = new Date().toISOString();
+        const posts = state.posts.filter(post => post.id !== id);
+        state.posts = [...posts, action.payload];
+      })
   },
 });
 
 export const getAllPosts = (state) => state.posts.posts;
 export const getPostsStatus = (state) => state.posts.status;
 export const getPostsError = (state) => state.posts.error;
+export const getPostById = (state, id) => state.posts.posts.find(post => post.id === id);
 
 export const { postAdded, reactionAdded } = postsSlice.actions;
 export default postsSlice.reducer;

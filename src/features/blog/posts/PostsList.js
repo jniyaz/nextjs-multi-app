@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import AddPost from "./AddPost";
+import { useSelector } from "react-redux";
 import { getAllPosts, getPostsStatus, getPostsError } from "./postsSlice";
 import PostExcerpt from "./PostExcerpt";
 
@@ -25,18 +24,12 @@ const PostsList = () => {
   }
 
   return (
-    <div>
-      <div className="py-4">
-        <hr />
-        <div className="py-3">
-          <AddPost />
-        </div>
-      </div>
+    <>
       <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
         Articles
       </h2>
       {!isSSR && content}
-    </div>
+    </>
   );
 };
 

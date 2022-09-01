@@ -2,38 +2,42 @@ import { useState } from "react";
 import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from "react-redux";
 import { getAllUsers } from "../../users/usersSlice";
-import { addNewPost } from "./postsSlice";
+import { getPostById, updatePost } from "./postsSlice";
 
-const AddPost = () => {
+
+const EditPost = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const { id } = router.query;
+
+  const post = useSelector(state => getPostById(state, Number(id)));
   const users = useSelector(getAllUsers);
 
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [userId, setUserId] = useState("");
-  const [addRequestStatus, setAddRequestStatus] = useState("idle");
+  const [title, setTitle] = useState(post.title);
+  const [content, setContent] = useState(post.body);
+  const [userId, setUserId] = useState(post.userId);
+  const [requestStatus, setRequestStatus] = useState("idle");
 
   const onTitleChanged = (e) => setTitle(e.target.value);
   const onContentChanged = (e) => setContent(e.target.value);
   const onAuthorChanged = (e) => setUserId(e.target.value);
 
   const canSave =
-    [title, content, userId].every(Boolean) && addRequestStatus === "idle";
+    [title, content, userId].every(Boolean) && requestStatus === "idle";
 
   const onSubmit = () => {
     if (canSave) {
       try {
-        setAddRequestStatus("pending");
-        dispatch(addNewPost({title, body: content, userId})).unwrap();
+        setRequestStatus("pending");
+        dispatch(updatePost({id: post.id, title, body: content, userId, reactions: post.reactions})).unwrap();
         setTitle("");
         setContent("");
         setUserId("");
-        router.push('/posts');
+        router.push(`/posts/${id}`)
       } catch (error) {
-        console.log(error.message);
+        console.log('failed to save : ', error.message);
       } finally {
-        setAddRequestStatus("idle");
+        setRequestStatus("idle");
       }
     }
   };
@@ -46,7 +50,7 @@ const AddPost = () => {
 
   return (
     <>
-      <h2 className="text-xl font-bold text-gray-800 mb-2">New Article</h2>
+      <h2 className="text-xl font-bold text-gray-800 mb-2">Edit Article</h2>
       <form>
         <div className="flex flex-col my-3">
           <label>Author:</label>
@@ -90,7 +94,7 @@ const AddPost = () => {
             onClick={onSubmit}
             disabled={!canSave}
           >
-            Add Post
+            Save Post
           </button>
         </div>
       </form>
@@ -98,4 +102,4 @@ const AddPost = () => {
   );
 };
 
-export default AddPost;
+export default EditPost;

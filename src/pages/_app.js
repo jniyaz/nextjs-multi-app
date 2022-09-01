@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import { store } from "../app/store";
 import { fetchUsers } from "./../features/users/usersSlice";
 import { fetchPosts } from "../features/blog/posts/postsSlice";
+import SiteLayout from "../layouts/SiteLayout";
 
 store.dispatch(fetchPosts());
 store.dispatch(fetchUsers());
@@ -23,7 +24,9 @@ function MyApp({ Component, pageProps }) {
   } else {
     return (
       <Provider store={store}>
-        <Component {...pageProps} />
+        <SiteLayout>
+          <Component {...pageProps} />
+        </SiteLayout>
       </Provider>
     );
   }
