@@ -1,13 +1,13 @@
 import Link from 'next/link';
 import { useSelector } from "react-redux";
-import { getPostById } from "./postsSlice";
+import { selectPostById } from "./postsSlice";
 
 import PostAuthor from "./PostAuthor";
 import TimeAgo from "./TimeAgo";
 import ReactionButtons from "./ReactionButtons";
 
 const SinglePost = ({ postId }) => {
-  const post = useSelector((state) => getPostById(state, Number(postId)));
+  const post = useSelector((state) => selectPostById(state, Number(postId)));
 
   if (!post) {
     return (

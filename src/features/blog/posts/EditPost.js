@@ -2,14 +2,14 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllUsers } from "../../users/usersSlice";
-import { getPostById, updatePost, deletePost } from "./postsSlice";
+import { selectPostById, updatePost, deletePost } from "./postsSlice";
 
 const EditPost = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { id } = router.query;
 
-  const post = useSelector((state) => getPostById(state, Number(id)));
+  const post = useSelector((state) => selectPostById(state, Number(id)));
   const users = useSelector(getAllUsers);
 
   const [title, setTitle] = useState(post.title);
@@ -19,7 +19,7 @@ const EditPost = () => {
 
   const onTitleChanged = (e) => setTitle(e.target.value);
   const onContentChanged = (e) => setContent(e.target.value);
-  const onAuthorChanged = (e) => setUserId(e.target.value);
+  const onAuthorChanged = (e) => setUserId(Number(e.target.value));
 
   const canSave =
     [title, content, userId].every(Boolean) && requestStatus === "idle";

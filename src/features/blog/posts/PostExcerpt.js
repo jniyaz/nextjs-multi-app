@@ -1,9 +1,14 @@
+import React from 'react';
 import Link from 'next/link';
 import PostAuthor from "./PostAuthor";
 import TimeAgo from "./TimeAgo";
 import ReactionButtons from "./ReactionButtons";
+import { useSelector } from 'react-redux';
+import { selectPostById } from './postsSlice';
 
-const PostExcerpt = ({ post }) => {
+const PostExcerpt = ({ postId }) => {
+  const post = useSelector(state => selectPostById(state, postId));
+
   return (
     <article className="py-2" key={post.id}>
       <div className="text-xs text-gray-600">
@@ -27,4 +32,6 @@ const PostExcerpt = ({ post }) => {
   );
 };
 
+// performance optimization
+// const PostExcerpt = React.memo(PostsExcerpt)
 export default PostExcerpt;
