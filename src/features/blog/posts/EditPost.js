@@ -1,16 +1,15 @@
 import { useState } from "react";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllUsers } from "../../users/usersSlice";
-import { getPostById, updatePost } from "./postsSlice";
-
+import { getPostById, updatePost, deletePost } from "./postsSlice";
 
 const EditPost = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { id } = router.query;
 
-  const post = useSelector(state => getPostById(state, Number(id)));
+  const post = useSelector((state) => getPostById(state, Number(id)));
   const users = useSelector(getAllUsers);
 
   const [title, setTitle] = useState(post.title);
@@ -29,13 +28,38 @@ const EditPost = () => {
     if (canSave) {
       try {
         setRequestStatus("pending");
-        dispatch(updatePost({id: post.id, title, body: content, userId, reactions: post.reactions})).unwrap();
+        dispatch(
+          updatePost({
+            id: post.id,
+            title,
+            body: content,
+            userId,
+            reactions: post.reactions,
+          })
+        ).unwrap();
         setTitle("");
         setContent("");
         setUserId("");
-        router.push(`/posts/${id}`)
+        router.push(`/posts/${id}`);
       } catch (error) {
-        console.log('failed to save : ', error.message);
+        console.log("failed to save : ", error.message);
+      } finally {
+        setRequestStatus("idle");
+      }
+    }
+  };
+
+  const onDelete = () => {
+    if (confirm("Are you sure?")) {
+      try {
+        setRequestStatus("pending");
+        dispatch(deletePost({ id: post.id })).unwrap();
+        setTitle("");
+        setContent("");
+        setUserId("");
+        router.push(`/posts`);
+      } catch (error) {
+        console.log("failed to save : ", error.message);
       } finally {
         setRequestStatus("idle");
       }
@@ -95,6 +119,13 @@ const EditPost = () => {
             disabled={!canSave}
           >
             Save Post
+          </button>
+          <button
+            type="button"
+            className="bg-red-500 text-white px-4 py-2 mx-4 rounded-sm"
+            onClick={onDelete}
+          >
+            Delete Post
           </button>
         </div>
       </form>

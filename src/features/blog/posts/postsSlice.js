@@ -44,6 +44,20 @@ export const updatePost = createAsyncThunk(
   }
 );
 
+export const deletePost = createAsyncThunk(
+  "posts/deletePost",
+  async (initialPost) => {
+    const { id } = initialPost;
+    try {
+      const res = await axios.delete(`${POSTS_URL}/${id}`);
+      if (res?.status === 200) return initialPost;
+      return `${res.status} : ${res.statusText}`;
+    } catch (err) {
+      return err.message;
+    }
+  }
+);
+
 const postsSlice = createSlice({
   name: "posts",
   initialState,
@@ -119,15 +133,25 @@ const postsSlice = createSlice({
       })
       .addCase(updatePost.fulfilled, (state, action) => {
         if (!action.payload?.id) {
-          console.log('could not complete');
+          console.log("update could not complete");
           console.log(action.payload);
           return;
         }
         const { id } = action.payload;
         action.payload.userId = Number(action.payload.userId);
         action.payload.date = new Date().toISOString();
-        const posts = state.posts.filter(post => post.id !== id);
+        const posts = state.posts.filter((post) => post.id !== id);
         state.posts = [...posts, action.payload];
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        if (!action.payload?.id) {
+          console.log("delete could not complete");
+          console.log(action.payload);
+          return;
+        }
+        const { id } = action.payload
+        const posts = state.posts.filter(post => post.id !== id);
+        state.posts = posts;
       })
   },
 });
@@ -135,7 +159,8 @@ const postsSlice = createSlice({
 export const getAllPosts = (state) => state.posts.posts;
 export const getPostsStatus = (state) => state.posts.status;
 export const getPostsError = (state) => state.posts.error;
-export const getPostById = (state, id) => state.posts.posts.find(post => post.id === id);
+export const getPostById = (state, id) =>
+  state.posts.posts.find((post) => post.id === id);
 
 export const { postAdded, reactionAdded } = postsSlice.actions;
 export default postsSlice.reducer;

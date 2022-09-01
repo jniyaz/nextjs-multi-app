@@ -36,8 +36,11 @@ const SinglePost = ({ postId }) => {
       </div>
       <div className='py-4'>
         <Link href={`/posts/edit/${post.id}`}>
-          <h3 className="font-semibold text-gray-800 mb-2 hover:underline text-sm">Edit</h3>
+          <span className="font-semibold text-gray-800 hover:underline text-sm">Edit</span>
         </Link>
+        {/* <Link href={`/posts/edit/${post.id}`}>
+          <span className="font-semibold text-gray-800 hover:underline text-sm ml-3">Delete</span>
+        </Link> */}
       </div>
     </article>
   );
