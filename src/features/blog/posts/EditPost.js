@@ -1,13 +1,21 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { getAllUsers } from "../../users/usersSlice";
-import { selectPostById, updatePost, deletePost } from "./postsSlice";
+import {
+  selectPostById,
+  updatePost,
+  deletePost,
+  useUpdatePostMutation,
+  useDeletePostMutation,
+} from "./postsSlice";
 
 const EditPost = () => {
-  const dispatch = useDispatch();
   const router = useRouter();
   const { id } = router.query;
+
+  const [updatePost, { isLoading }] = useUpdatePostMutation();
+  const [deletePost] = useDeletePostMutation();
 
   const post = useSelector((state) => selectPostById(state, Number(id)));
   const users = useSelector(getAllUsers);
@@ -15,53 +23,42 @@ const EditPost = () => {
   const [title, setTitle] = useState(post.title);
   const [content, setContent] = useState(post.body);
   const [userId, setUserId] = useState(post.userId);
-  const [requestStatus, setRequestStatus] = useState("idle");
 
   const onTitleChanged = (e) => setTitle(e.target.value);
   const onContentChanged = (e) => setContent(e.target.value);
   const onAuthorChanged = (e) => setUserId(Number(e.target.value));
 
-  const canSave =
-    [title, content, userId].every(Boolean) && requestStatus === "idle";
+  const canSave = [title, content, userId].every(Boolean) && !isLoading;
 
-  const onSubmit = () => {
+  const handleSubmit = async () => {
     if (canSave) {
       try {
-        setRequestStatus("pending");
-        dispatch(
-          updatePost({
-            id: post.id,
-            title,
-            body: content,
-            userId,
-            reactions: post.reactions,
-          })
-        ).unwrap();
+        await updatePost({
+          id: post.id,
+          title,
+          body: content,
+          userId,
+        }).unwrap();
         setTitle("");
         setContent("");
         setUserId("");
         router.push(`/posts/${id}`);
       } catch (error) {
         console.log("failed to save : ", error.message);
-      } finally {
-        setRequestStatus("idle");
       }
     }
   };
 
-  const onDelete = () => {
+  const handleDelete = async () => {
     if (confirm("Are you sure?")) {
       try {
-        setRequestStatus("pending");
-        dispatch(deletePost({ id: post.id })).unwrap();
+        await deletePost({ id: post.id }).unwrap();
         setTitle("");
         setContent("");
         setUserId("");
         router.push(`/posts`);
       } catch (error) {
         console.log("failed to save : ", error.message);
-      } finally {
-        setRequestStatus("idle");
       }
     }
   };
@@ -115,7 +112,7 @@ const EditPost = () => {
           <button
             type="button"
             className="bg-blue-500 text-white px-4 py-2 my-4 rounded-sm"
-            onClick={onSubmit}
+            onClick={handleSubmit}
             disabled={!canSave}
           >
             Save Post
@@ -123,7 +120,7 @@ const EditPost = () => {
           <button
             type="button"
             className="bg-red-500 text-white px-4 py-2 mx-4 rounded-sm"
-            onClick={onDelete}
+            onClick={handleDelete}
           >
             Delete Post
           </button>

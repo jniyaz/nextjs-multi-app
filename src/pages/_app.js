@@ -3,10 +3,10 @@ import "../styles/globals.css";
 import { Provider } from "react-redux";
 import { store } from "../app/store";
 import { fetchUsers } from "./../features/users/usersSlice";
-import { fetchPosts } from "../features/blog/posts/postsSlice";
 import SiteLayout from "../layouts/SiteLayout";
+import { extendedApiSlice } from "../features/blog/posts/postsSlice";
 
-store.dispatch(fetchPosts());
+store.dispatch(extendedApiSlice.endpoints.getPosts.initiate());
 store.dispatch(fetchUsers());
 
 function MyApp({ Component, pageProps }) {
