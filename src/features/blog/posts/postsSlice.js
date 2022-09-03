@@ -1,6 +1,6 @@
 import { createSelector, createEntityAdapter } from "@reduxjs/toolkit";
 import { sub } from "date-fns";
-import { apiSlice } from "../../api/apiSlice";
+import { postApi } from "../../api/postApi";
 
 // most resent posts top of the list / reverse order
 const postsAdapter = createEntityAdapter({
@@ -9,7 +9,7 @@ const postsAdapter = createEntityAdapter({
 
 const initialState = postsAdapter.getInitialState();
 
-export const extendedApiSlice = apiSlice.injectEndpoints({
+export const extendedPostApi = postApi.injectEndpoints({
   endpoints: (builder) => ({
     getPosts: builder.query({
       query: () => "/posts",
@@ -109,7 +109,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
         { dispatch, queryFullfilled }
       ) {
         const patchResult = dispatch(
-          extendedApiSlice.util.updateQueryData(
+          extendedPostApi.util.updateQueryData(
             "getPosts",
             undefined,
             (draft) => {
@@ -135,10 +135,10 @@ export const {
   useUpdatePostMutation,
   useDeletePostMutation,
   useAddReactionMutation,
-} = extendedApiSlice;
+} = extendedPostApi;
 
 // returns the query result object
-export const selectPostsResult = extendedApiSlice.endpoints.getPosts.select();
+export const selectPostsResult = extendedPostApi.endpoints.getPosts.select();
 
 // creates memoized selector
 const selectPostsData = createSelector(
