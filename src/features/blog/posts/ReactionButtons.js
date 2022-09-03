@@ -16,7 +16,7 @@ const ReactionButtons = ({ post }) => {
       <button
         key={name}
         type="button"
-        className="px-2 text-md"
+        className={`${name == "thumbsUp" ? "" : "px-2"}`}
         onClick={() => {
           const newValue = post.reactions[name] + 1;
           addReaction({

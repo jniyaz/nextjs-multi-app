@@ -4,9 +4,9 @@ import { Provider } from "react-redux";
 import { store } from "../app/store";
 import { fetchUsers } from "./../features/users/usersSlice";
 import SiteLayout from "../layouts/SiteLayout";
-import { extendedApiSlice } from "../features/blog/posts/postsSlice";
+import { extendedPostApi } from "../features/blog/posts/postsSlice";
 
-store.dispatch(extendedApiSlice.endpoints.getPosts.initiate());
+store.dispatch(extendedPostApi.endpoints.getPosts.initiate());
 store.dispatch(fetchUsers());
 
 function MyApp({ Component, pageProps }) {
