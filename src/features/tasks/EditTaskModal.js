@@ -1,23 +1,23 @@
 import { useState } from "react";
-import { useAddTaskMutation } from "../api/taskApi";
+import { useUpdateTaskMutation } from "../api/taskApi";
 
-const AddTaskModal = ({ onClose }) => {
-  const [addTask] = useAddTaskMutation();
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+const EditTaskModal = ({ onClose, taskId, taskTitle, taskDesc }) => {
+  const [updateTask] = useUpdateTaskMutation();
+  const [title, setTitle] = useState(taskTitle);
+  const [description, setDescription] = useState(taskDesc);
 
   const onTitleChanged = (e) => setTitle(e.target.value);
   const onDescChanged = (e) => setDescription(e.target.value);
 
-  const handleAddTask = async (e) => {
+  const handleEditTask = async (e) => {
     e.preventDefault();
     const task = {
       title,
       description,
       completed: false,
-      id: Math.random(),
+      id: taskId
     };
-    await addTask(task);
+    await updateTask(task);
     onClose();
   };
 
@@ -35,11 +35,10 @@ const AddTaskModal = ({ onClose }) => {
           aria-modal="true"
           aria-labelledby="modal-headline"
         >
-          <form name="addTask" onSubmit={handleAddTask}>
+          <form name="addTask" onSubmit={handleEditTask}>
             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
               <div className="sm:flex sm:items-start">
                 <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
-                  {/* <!-- Heroicon name: exclamation --> */}
                   <svg
                     className="w-6 h-6 text-blue-400"
                     fill="none"
@@ -98,7 +97,7 @@ const AddTaskModal = ({ onClose }) => {
                   type="submit"
                   className="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-blue-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:blue-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5 "
                 >
-                  Add
+                  Save
                 </button>
               </span>
               <span className="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
@@ -118,4 +117,4 @@ const AddTaskModal = ({ onClose }) => {
   );
 };
 
-export default AddTaskModal;
+export default EditTaskModal;

@@ -884,7 +884,7 @@
   "tasks": [
     {
       "title": "READ A REACT BOOK",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+      "description": "Update - WIP /  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
       "completed": false,
       "id": 1
     },
@@ -895,7 +895,7 @@
       "id": 2
     },
     {
-      "title": "hey there, testing",
+      "title": "Hey there!",
       "description": "Hey, check the ticket no uwp-6345 asap.",
       "completed": false,
       "id": 0.15579998465808798

@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { format } from "date-fns";
-import DeleteModal from '../../components/modal/DeleteModal';
+import DeleteModal from "../../components/modal/DeleteModal";
+import EditTaskModal from "./EditTaskModal";
 
 const Task = ({ task }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
 
-  const closeModal = () => {
+  const onClose = () => {
+    setShowEditModal(false);
     setShowDeleteModal(false);
   };
 
@@ -40,7 +43,9 @@ const Task = ({ task }) => {
             type="checkbox"
             className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
           />
-          <h3 className="font-semibold text-gray-800 my-2 text-lg ml-2">{task.title}</h3>
+          <h3 className="font-semibold text-gray-800 my-2 text-lg ml-2">
+            {task.title}
+          </h3>
         </div>
 
         <div className="mb-4 w-full text-gray-700 text-sm">
@@ -48,25 +53,6 @@ const Task = ({ task }) => {
         </div>
 
         <div className="flex items-center justify-between">
-          <div className="text-sm text-gray-800 inline-flex items-center">
-            <a href="#">
-              <img
-                className="w-8 h-8 rounded-full inline-block mr-2"
-                src="https://avatars0.githubusercontent.com/u/8238734?s=460&u=4fb91c2850a8e1e7aeb7c2c7a7c7c27f97230823&v=4"
-                alt="Asian Girl Avatar"
-              />
-            </a>
-            <span className="mx-1">&bull;</span>
-            <a href="#" className="hover:underline text-xs font-light">
-              Niyaz
-            </a>
-            <span className="mx-1">&bull;</span>
-            <span className="text-xs font-light">
-              {format(new Date(), "dd/mm/yyyy")}
-            </span>
-          </div>
-
-          <div className="text-right">
             <div className="flex items-center">
               <a
                 href="#"
@@ -93,27 +79,28 @@ const Task = ({ task }) => {
                   ></path>
                 </svg>
               </a>
-              <Link href="/tasks/edit">
-                <a
-                  href="#"
-                  className="bg-gray-200 hover:bg-gray-300 rounded-md px-2 py-1 ml-2 text-blue-600 text-xs uppercase"
+
+              <a
+                href="#"
+                className="bg-gray-200 hover:bg-gray-300 rounded-md px-2 py-1 ml-2 text-blue-600 text-xs uppercase"
+                onClick={() => setShowEditModal(true)}
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                    ></path>
-                  </svg>
-                </a>
-              </Link>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  ></path>
+                </svg>
+              </a>
+
               <a
                 href="#"
                 onClick={() => setShowDeleteModal(true)}
@@ -135,10 +122,19 @@ const Task = ({ task }) => {
                 </svg>
               </a>
             </div>
-          </div>
         </div>
       </div>
-      {showDeleteModal ? <DeleteModal closeModal={closeModal} /> : ""}
+      {showEditModal ? (
+        <EditTaskModal
+          onClose={onClose}
+          taskId={task.id}
+          taskTitle={task.title}
+          taskDesc={task.description}
+        />
+      ) : (
+        ""
+      )}
+      {showDeleteModal ? <DeleteModal onClose={onClose} /> : ""}
     </div>
   );
 };

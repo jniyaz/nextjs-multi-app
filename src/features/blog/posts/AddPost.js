@@ -60,7 +60,9 @@ const AddPost = () => {
           <input
             name="title"
             type="text"
-            className="enabled:hover:border-gray-400 disabled:opacity-75 my-2  focus:border-blue-600 focus:outline-none"
+            className={
+              "enabled:hover:border-gray-400 disabled:opacity-75 my-2  focus:border-blue-600 focus:outline-none"
+            }
             value={title}
             onChange={onTitleChanged}
           />
@@ -82,7 +84,11 @@ const AddPost = () => {
         <div>
           <button
             type="button"
-            className="bg-blue-500 text-white px-4 py-2 my-4 rounded-sm"
+            className={`bg-blue-500 text-white px-4 py-2 my-4 rounded-sm  ${
+              !canSave
+                ? "bg-gray-50 text-gray-500 border cursor-not-allowed text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none"
+                : ""
+            }`}
             onClick={handleSubmit}
             disabled={!canSave}
           >
