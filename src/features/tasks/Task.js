@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import DeleteModal from "./DeleteModal";
 import EditTaskModal from "./EditTaskModal";
+import ViewTaskModal from "./ViewTaskModal";
 
 const Task = ({ task }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showViewModal, setShowViewModal] = useState(false);
 
   const onClose = () => {
     setShowEditModal(false);
+    setShowViewModal(false);
     setShowDeleteModal(false);
   };
 
@@ -54,7 +57,8 @@ const Task = ({ task }) => {
             <div className="flex items-center">
               <a
                 href="#"
-                className="bg-gray-200 hover:bg-gray-300 rounded-md px-2 py-1 text-red-600 text-xs uppercase"
+                className="bg-gray-200 hover:bg-gray-300 rounded-md px-2 py-1 text-blue-600 text-xs uppercase"
+                onClick={() => setShowViewModal(true)}
               >
                 <svg
                   className="w-4 h-4"
@@ -80,7 +84,7 @@ const Task = ({ task }) => {
 
               <a
                 href="#"
-                className="bg-gray-200 hover:bg-gray-300 rounded-md px-2 py-1 ml-2 text-blue-600 text-xs uppercase"
+                className="bg-gray-200 hover:bg-gray-300 rounded-md px-2 py-1 ml-2 text-yellow-600 text-xs uppercase"
                 onClick={() => setShowEditModal(true)}
               >
                 <svg
@@ -132,6 +136,7 @@ const Task = ({ task }) => {
       ) : (
         ""
       )}
+      {showViewModal ? <ViewTaskModal onClose={onClose} task={task} /> : ""}
       {showDeleteModal ? <DeleteModal onClose={onClose} taskId={task.id} /> : ""}
     </div>
   );
