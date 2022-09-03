@@ -1,39 +1,35 @@
 import { useState } from "react";
-import { useRouter } from 'next/router';
-import { useSelector, useDispatch } from "react-redux";
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 import { getAllUsers } from "../../users/usersSlice";
-import { addNewPost } from "./postsSlice";
+import { useAddNewPostMutation } from "./postsSlice";
 
 const AddPost = () => {
-  const dispatch = useDispatch();
+  const [addNewPost, { isLoading }] = useAddNewPostMutation();
+
   const router = useRouter();
   const users = useSelector(getAllUsers);
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [userId, setUserId] = useState("");
-  const [addRequestStatus, setAddRequestStatus] = useState("idle");
 
   const onTitleChanged = (e) => setTitle(e.target.value);
   const onContentChanged = (e) => setContent(e.target.value);
   const onAuthorChanged = (e) => setUserId(e.target.value);
 
-  const canSave =
-    [title, content, userId].every(Boolean) && addRequestStatus === "idle";
+  const canSave = [title, content, userId].every(Boolean) && !isLoading;
 
-  const onSubmit = () => {
+  const handleSubmit = async () => {
     if (canSave) {
       try {
-        setAddRequestStatus("pending");
-        dispatch(addNewPost({title, body: content, userId})).unwrap();
+        await addNewPost({ title, body: content, userId }).unwrap();
         setTitle("");
         setContent("");
         setUserId("");
-        router.push('/posts');
+        router.push("/posts");
       } catch (error) {
         console.log(error.message);
-      } finally {
-        setAddRequestStatus("idle");
       }
     }
   };
@@ -87,7 +83,7 @@ const AddPost = () => {
           <button
             type="button"
             className="bg-blue-500 text-white px-4 py-2 my-4 rounded-sm"
-            onClick={onSubmit}
+            onClick={handleSubmit}
             disabled={!canSave}
           >
             Add Post

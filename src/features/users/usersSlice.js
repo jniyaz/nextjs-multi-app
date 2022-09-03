@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const USERS_URL = 'https://jsonplaceholder.typicode.com/users';
+const USERS_URL = 'http://localhost:3500/users';
 
 const initialState = []
 
