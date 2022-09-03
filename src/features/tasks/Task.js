@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { format } from "date-fns";
+import DeleteModal from '../../components/modal/DeleteModal';
 
 const Task = ({ task }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -17,7 +18,7 @@ const Task = ({ task }) => {
   return (
     <div className="w-full relative overflow-hidden md:flex mb-4 py-2 bg-white border border-gray-200 sm:px-4 sm:py-4 md:px-4 sm:rounded-lg sm:shadow-sm">
       <span className="text-gray-700 bg-gray-300 px-3 py-1 font-light text-xs absolute right-0 top-0 rounded-bl capitalize">
-        Pending
+        {task.completed ? "Done" : "Not Completed"}
       </span>
       <div className="w-full px-4 py-4">
         <div className="text-gray-600 text-xs font-light">
@@ -32,13 +33,19 @@ const Task = ({ task }) => {
           </span> */}
         </div>
 
-        <h3 className="font-semibold text-gray-800 my-2 hover:underline text-lg">
-          <Link href="/cars/[make]/[model]/[id]">
-            <a target="_blank">{task.title}</a>
-          </Link>
-        </h3>
+        <div className="flex items-center">
+          <input
+            id="remember-me"
+            name="remember-me"
+            type="checkbox"
+            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+          />
+          <h3 className="font-semibold text-gray-800 my-2 text-lg ml-2">{task.title}</h3>
+        </div>
 
-        <div className="mb-4 w-full text-gray-700 text-sm">{task.description}</div>
+        <div className="mb-4 w-full text-gray-700 text-sm">
+          {task.description}
+        </div>
 
         <div className="flex items-center justify-between">
           <div className="text-sm text-gray-800 inline-flex items-center">
@@ -54,15 +61,42 @@ const Task = ({ task }) => {
               Niyaz
             </a>
             <span className="mx-1">&bull;</span>
-            <span className="text-xs font-light">{ format(new Date(), 'dd/mm/yyyy') }</span>
+            <span className="text-xs font-light">
+              {format(new Date(), "dd/mm/yyyy")}
+            </span>
           </div>
 
           <div className="text-right">
             <div className="flex items-center">
+              <a
+                href="#"
+                className="bg-gray-200 hover:bg-gray-300 rounded-md px-2 py-1 text-red-600 text-xs uppercase"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  ></path>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  ></path>
+                </svg>
+              </a>
               <Link href="/tasks/edit">
                 <a
                   href="#"
-                  className="bg-gray-200 hover:bg-gray-300 rounded-md px-2 py-1 text-blue-600 text-xs uppercase"
+                  className="bg-gray-200 hover:bg-gray-300 rounded-md px-2 py-1 ml-2 text-blue-600 text-xs uppercase"
                 >
                   <svg
                     className="w-4 h-4"
@@ -104,7 +138,7 @@ const Task = ({ task }) => {
           </div>
         </div>
       </div>
-      {/* {showDeleteModal ? <Delete closeModal={closeModal} /> : ""} */}
+      {showDeleteModal ? <DeleteModal closeModal={closeModal} /> : ""}
     </div>
   );
 };
