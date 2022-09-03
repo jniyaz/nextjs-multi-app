@@ -899,12 +899,6 @@
       "description": "Hey, check the ticket no uwp-6345 asap.",
       "completed": false,
       "id": 0.15579998465808798
-    },
-    {
-      "title": "test 2",
-      "description": "testing 2...",
-      "completed": false,
-      "id": 0.6898496850459548
     }
   ]
 }

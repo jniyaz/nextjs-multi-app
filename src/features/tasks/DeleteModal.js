@@ -1,8 +1,14 @@
-const DeleteModal = ({ 
-    closeModal, 
-    title="Delete Confirmation",
-    message="Are you sure. This action cannot be undone." 
-  }) => {
+import { useDeleteTaskMutation } from "../api/taskApi";
+
+const DeleteModal = ({ onClose, taskId }) => {
+  const [deleteTask] = useDeleteTaskMutation();
+
+  const handleDeleteTask = async (e) => {
+    e.preventDefault();
+    await deleteTask(taskId);
+    onClose();
+  }
+
   return (
     <div className="fixed z-10 inset-0 overflow-y-auto">
       <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -20,7 +26,6 @@ const DeleteModal = ({
           <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div className="sm:flex sm:items-start">
               <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                {/* <!-- Heroicon name: exclamation --> */}
                 <svg
                   className="h-6 w-6 text-red-600"
                   xmlns="http://www.w3.org/2000/svg"
@@ -40,9 +45,9 @@ const DeleteModal = ({
                 <h3
                   className="text-lg leading-6 font-medium text-gray-900"
                   id="modal-headline"
-                >{title}</h3>
+                >{"Delete Confirmation"}</h3>
                 <div className="mt-2">
-                  <p className="text-sm leading-5 text-gray-500">{message}</p>
+                  <p className="text-sm leading-5 text-gray-500">{"Are you sure. This action cannot be undone."}</p>
                 </div>
               </div>
             </div>
@@ -52,16 +57,16 @@ const DeleteModal = ({
               <button
                 type="button"
                 className="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-red-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5"
-                onClick={() => closeModal()}
+                onClick={handleDeleteTask}
               >
-                Agree
+                Delete
               </button>
             </span>
             <span className="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
               <button
                 type="button"
                 className="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5"
-                onClick={() => closeModal()}
+                onClick={() => onClose()}
               >
                 Cancel
               </button>

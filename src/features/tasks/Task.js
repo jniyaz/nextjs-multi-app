@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { format } from "date-fns";
-import DeleteModal from "../../components/modal/DeleteModal";
+import DeleteModal from "./DeleteModal";
 import EditTaskModal from "./EditTaskModal";
 
 const Task = ({ task }) => {
@@ -134,7 +132,7 @@ const Task = ({ task }) => {
       ) : (
         ""
       )}
-      {showDeleteModal ? <DeleteModal onClose={onClose} /> : ""}
+      {showDeleteModal ? <DeleteModal onClose={onClose} taskId={task.id} /> : ""}
     </div>
   );
 };
