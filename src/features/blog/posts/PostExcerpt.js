@@ -29,7 +29,7 @@ const PostExcerpt = ({ postId }) => {
             <TimeAgo timestamp={post.date} />
           </div>
 
-          <div className="text-right">
+          {/* <div className="text-right">
             <div className="flex items-center">
               <Link href={`/posts/edit/${post.id}`}>
                 <a
@@ -53,7 +53,7 @@ const PostExcerpt = ({ postId }) => {
                 </a>
               </Link>
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="mt-3">
           <ReactionButtons post={post} />

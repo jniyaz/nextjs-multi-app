@@ -5,9 +5,11 @@ export const taskApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:3500",
   }),
+  tagTypes: ["Task"],
   endpoints: (builder) => ({
     tasks: builder.query({
       query: () => "/tasks",
+      providesTags: ["Task"],
     }),
     addTask: builder.mutation({
       query: (task) => ({
@@ -15,6 +17,7 @@ export const taskApi = createApi({
         method: "POST",
         body: task,
       }),
+      invalidatesTags: ["Task"],
     }),
     updateTask: builder.mutation({
       query: ({ id, ...rest }) => ({
@@ -22,12 +25,14 @@ export const taskApi = createApi({
         method: "PUT",
         body: rest,
       }),
+      invalidatesTags: ["Task"],
     }),
     deleteTask: builder.mutation({
       query: (id) => ({
         url: `/tasks/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["Task"],
     }),
   }),
 });
