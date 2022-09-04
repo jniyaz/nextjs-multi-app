@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import toast from 'react-hot-toast';
 import { useUpdateTaskMutation } from "../api/taskApi";
 import DeleteModal from "./DeleteModal";
 import EditTaskModal from "./EditTaskModal";
@@ -29,6 +30,7 @@ const Task = ({ task }) => {
       id: task.id,
     };
     await updateTask(taskObj);
+    toast.success('Update task successful!');
   };
 
   useEffect(() => {

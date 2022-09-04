@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from 'react-hot-toast';
 import { useAddTaskMutation } from "../api/taskApi";
 
 const AddTaskModal = ({ onClose }) => {
@@ -18,6 +19,7 @@ const AddTaskModal = ({ onClose }) => {
       id: Math.random(),
     };
     await addTask(task);
+    toast.success('Add task successful!');
     onClose();
   };
 

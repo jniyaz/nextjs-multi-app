@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from 'react-hot-toast';
 import { useUpdateTaskMutation } from "../api/taskApi";
 
 const EditTaskModal = ({ onClose, taskId, taskTitle, taskDesc }) => {
@@ -18,6 +19,7 @@ const EditTaskModal = ({ onClose, taskId, taskTitle, taskDesc }) => {
       id: taskId
     };
     await updateTask(task);
+    toast.success('Update task successful!');
     onClose();
   };
 
