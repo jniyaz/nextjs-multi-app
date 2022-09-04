@@ -9,7 +9,7 @@ const EditTaskModal = ({ onClose, taskId, taskTitle, taskDesc }) => {
   const onTitleChanged = (e) => setTitle(e.target.value);
   const onDescChanged = (e) => setDescription(e.target.value);
 
-  const handleEditTask = async (e) => {
+  const handleUpdateTask = async (e) => {
     e.preventDefault();
     const task = {
       title,
@@ -35,7 +35,7 @@ const EditTaskModal = ({ onClose, taskId, taskTitle, taskDesc }) => {
           aria-modal="true"
           aria-labelledby="modal-headline"
         >
-          <form name="editTask" onSubmit={handleEditTask}>
+          <form name="editTask" onSubmit={handleUpdateTask}>
             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
               <div className="sm:flex sm:items-start">
                 <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
