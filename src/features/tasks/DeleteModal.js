@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import { useDeleteTaskMutation } from "../api/taskApi";
 
 const DeleteModal = ({ onClose, taskId }) => {
@@ -6,6 +7,7 @@ const DeleteModal = ({ onClose, taskId }) => {
   const handleDeleteTask = async (e) => {
     e.preventDefault();
     await deleteTask(taskId);
+    toast.success('Delete task successful!');
     onClose();
   }
 

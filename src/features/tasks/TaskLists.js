@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useTasksQuery } from "../api/taskApi";
 import AddTaskModal from "./AddTaskModal";
 import Task from "./Task";
+import { Toaster } from 'react-hot-toast';
 
 const TaskLists = () => {
   const { data, error, isLoading, isSuccess } = useTasksQuery();
@@ -44,6 +45,7 @@ const TaskLists = () => {
         )}
       </div>
       {showAddTaskModal ? <AddTaskModal onClose={onClose} /> : ""}
+      <Toaster position="top-right" reverseOrder={true} />
     </>
   );
 };
